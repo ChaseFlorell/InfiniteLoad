@@ -13,7 +13,7 @@
     </local:MainPageModel>
 </ContentPage.BindingContext>
     <StackLayout>
-        <ListView ItemsSource="{Binding Items}">
+        <ListView ItemsSource="{Binding Items}" CachingStrategy="RecycleElement">
             <ListView.Behaviors>
                 <local:InfiniteLoadBehavior ItemsRemainingBuffer="10" />
             </ListView.Behaviors>
