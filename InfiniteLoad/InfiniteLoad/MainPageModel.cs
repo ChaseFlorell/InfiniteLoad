@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Threading;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace InfiniteLoad
@@ -17,20 +18,19 @@ namespace InfiniteLoad
         public MainPageModel(ItemService itemService) // please actually code against an interface and use Dependency Injection
         {
             _itemService = itemService;
-            LoadNextPage();
+            LoadNextPage().ContinueWith(_ =>{});
             Title = _pageTitle;
         }
 
         public Command ResetListCommand => new Command(() =>
         {
             Items.Clear();
-            LoadNextPage();
+            LoadNextPage().ContinueWith(_ =>{});
         });
 
         
-        public async void LoadNextPage()
+        public async Task LoadNextPage()
         {
-            IsLoadingPage = true;
             Title = "Loading...";
             
             var newItems = await _itemService.ListItems(Items.Count, _pageSize, CancellationToken.None);
@@ -38,13 +38,12 @@ namespace InfiniteLoad
                 Items.Add(item);
 
             Title = _pageTitle;
-            IsLoadingPage = false;
         }
 
         public bool IsLoadingPage
         {
             get => _isLoading;
-            private set
+            set
             {
                 _isLoading = value;
                 OnPropertyChanged();

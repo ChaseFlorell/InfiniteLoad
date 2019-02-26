@@ -26,7 +26,7 @@ namespace InfiniteLoad
             bindable.ItemAppearing -= OnItemAppearing;
         }
 
-        private void OnItemAppearing(object sender, ItemVisibilityEventArgs e)
+        private async void OnItemAppearing(object sender, ItemVisibilityEventArgs e)
         {
             var listView = (ListView) sender;
             if(!(listView.BindingContext is IPageable pageable))
@@ -43,9 +43,11 @@ namespace InfiniteLoad
                 return;
 
             //hit bottom!
+            pageable.IsLoadingPage = true;
             var itemIndex = itemsSource.IndexOf(e.Item);
             if(itemIndex >= itemsSource.Count - ItemsRemainingBuffer)
-                pageable.LoadNextPage();
+                await pageable.LoadNextPage().ConfigureAwait(true);
+            pageable.IsLoadingPage = false;
         }
     }
 }

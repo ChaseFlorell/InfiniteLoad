@@ -1,9 +1,11 @@
 
+using System.Threading.Tasks;
+
 namespace InfiniteLoad
 {
     public interface IPageable
     {
-        void LoadNextPage();
-        bool IsLoadingPage { get;  }
+        Task LoadNextPage();
+        bool IsLoadingPage { get; set; }
     }
 }
