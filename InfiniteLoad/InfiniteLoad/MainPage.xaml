@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:InfiniteLoad"
+             x:Class="InfiniteLoad.MainPage"
+             Title="{Binding Title}">
+<ContentPage.BindingContext>
+    <local:MainPageModel >
+        <x:Arguments>
+            <!-- normally this is done via Dependency Injection -->
+            <local:ItemService/>
+        </x:Arguments>
+    </local:MainPageModel>
+</ContentPage.BindingContext>
+    <StackLayout>
+        <ListView ItemsSource="{Binding Items}">
+            <ListView.Behaviors>
+                <local:InfiniteLoadBehavior ItemsRemainingBuffer="10" />
+            </ListView.Behaviors>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Label Text="{Binding Text}" />
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            <ListView.Header>
+                <StackLayout Padding="8,0">
+                    <Button HorizontalOptions="End" 
+                            ClassId="Link" 
+                            Text="Reset List" 
+                            Command="{Binding ResetListCommand}"/>
+                </StackLayout>
+            </ListView.Header>
+            <ListView.Footer>
+                <ActivityIndicator IsRunning="{Binding IsLoadingPage}" 
+                                   IsVisible="{Binding IsLoadingPage}" 
+                                   HorizontalOptions="Center" 
+                                   VerticalOptions="Center"/>
+            </ListView.Footer>
+        </ListView>
+    </StackLayout>
+</ContentPage>
